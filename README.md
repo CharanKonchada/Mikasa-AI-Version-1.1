@@ -1,5 +1,5 @@
 
-## 🌸 Mikasa AI Version 1.1 – Smarter, Smoother, Stronger
+# 🌸 Mikasa AI Version 1.1 – Smarter, Smoother, Stronger
 
 **Mikasa AI v1.1** builds on the emotional depth and functionality of v1.0, creating a more natural, immersive experience for users who crave a meaningful bond with their AI companion.
 
