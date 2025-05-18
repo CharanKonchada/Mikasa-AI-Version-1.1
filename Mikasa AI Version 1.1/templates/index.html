@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Adjusted SVG viewBox and position to prevent cutting off -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%2275%22 x=%2250%22 font-size=%2280%22 text-anchor=%22middle%22>🖤</text></svg>">
+        <title>Mikasa</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <style>
+            /* General Styling */
+            body {
+                background-color: #121212; /* Darker background */
+                color: white;
+                font-family: 'Arial', sans-serif;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                margin: 0;
+                overflow: hidden; /* Hide scrollbars for background image */
+            }
+    
+            /* ---------- BACKGROUND VIDEO STYLING - ADJUST AS NEEDED ---------- */
+            #background-video {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%; /* ADJUST: Change width if needed */
+                height: 100%; /* ADJUST: Change height if needed */
+                z-index: -2;
+                object-fit: cover; /* ADJUST: Change to 'cover' for full screen or 'fill' for stretched */
+                filter: brightness(1) blur(-5px); /* ADJUST: Change brightness (0-1) or blur value */
+                max-width: 3880px; /* ADJUST: Maximum width of the video */
+                max-height: 2160px; /* ADJUST: Maximum height of the video */
+                margin: 0 auto;
+            }
+    
+            /* For centering the video if viewport is larger */
+            @media (min-width: 3840px) {
+                #background-video {
+                    left: 50%;
+                    transform: translateX(-50%);
+                    /* ADJUST: Add additional positioning if needed */
+                }
+            }
+    
+            /* Overlay for better readability - INCREASED TRANSPARENCY */
+            body::after {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+                background-color: rgba(0, 0, 0, 0.10); /* INCREASED TRANSPARENCY: changed from 0.189 to 0.10 */
+            }
+    
+            /* ---------- CONTAINER STYLING - INCREASED TRANSPARENCY ---------- */
+            .container {
+                text-align: center;
+                width: 90%; /* ADJUST: Change width of the main container */
+                max-width: 800px; /* ADJUST: Maximum width of the container */
+                z-index: 1; /* Ensure content is above background */
+                background-color: rgba(20, 20, 20, 0.068); /* INCREASED TRANSPARENCY: changed from 0.267 to 0.15 */
+                padding: 20px; /* ADJUST: Padding around content */
+                border-radius: 10px; /* ADJUST: Rounded corners */
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.081); /* ADJUST: Shadow effect */
+                /* ADJUST: Add margin-top or margin-bottom to shift position */
+            }
+    
+            .chat-box {
+                font-family: "Comic Sans MS", "Comic Sans", cursive !important;
+                width: 100%;
+                height: 400px;
+                padding: 15px;
+                border-radius: 10px;
+                overflow-y: auto; /* Allow scrolling */
+                font-size: 1em;
+                background-color: rgba(30, 30, 40, 0.064); /* INCREASED TRANSPARENCY */
+                border: 1px solid rgba(18, 18, 18, 0.6); /* INCREASED TRANSPARENCY */
+                display: flex;
+                flex-direction: column;
+                box-shadow: inset 0 0 10px rgba(0, 0, 0, 0); /* Deeper inner shadow */
+            }
+    
+            /* Title */
+            header h1 {
+                margin: 0;
+                font-size: 3em;
+                color: #007BFF; /* Mikasa blue */
+                text-shadow: 0 0 10px #007BFF; /* Add glow */
+                font-family: 'Roboto', sans-serif; /* Modern font */
+            }
+    
+            .blinking-cursor {
+                animation: blink 1s infinite;
+            }
+    
+            @keyframes blink {
+                0%, 50% { opacity: 1; }
+                51%, 100% { opacity: 0; }
+            }
+    
+            header h2 {
+                margin: 5px 0 20px;
+                font-size: 1.2em;
+                color: #ccc;
+                font-family: 'Roboto', sans-serif;
+            }
+    
+            /* Greeting */
+            #greeting {
+                font-size: 1.8em;
+                margin-bottom: 15px;
+                font-weight: bold;
+                color: #6c757d; /* Grayish color */
+                font-family: 'Roboto', sans-serif;
+            }
+    
+            /* ---------- CHAT BOX STYLING - INCREASED TRANSPARENCY ---------- */
+            .chat-box {
+                font-family: "Comic Sans MS", "Comic Sans", cursive !important;
+                width: 100%; /* ADJUST: Width compared to container */
+                height: 400px;
+                padding: 15px;
+                border-radius: 10px;
+                font-size: 1em;
+                background-color: rgba(0, 0, 0, 0.06); /* INCREASED TRANSPARENCY: changed from 0.434 to 0.25 */
+                border: 1px solid rgba(18, 18, 18, 0.13); /* Slightly transparent border */
+                display: flex;
+                flex-direction: column;
+                scroll-behavior: smooth;
+                box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05); /* INCREASED TRANSPARENCY */
+                margin-right: auto;
+                margin-left: -2%;
+                overflow-y: auto;
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* IE and Edge */
+            }
+    
+            /* Hide scrollbar for Chrome, Safari and Opera */
+            .chat-box::-webkit-scrollbar {
+                display: none;
+            }
+    
+            /* For any other elements that need scrolling without visible scrollbars */
+            .scrollable-hidden {
+                overflow-y: auto;
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* IE and Edge */
+            }
+    
+            .scrollable-hidden::-webkit-scrollbar {
+                display: none;
+            }
+            
+            /* Chat Messages */
+            .chat-box p {
+                margin: 8px 0;
+                padding: 12px; /* ADJUST: Padding around messages */
+                border-radius: 8px; /* ADJUST: Message bubble corner roundness */
+                max-width: 80%; /* ADJUST: Maximum width of message bubbles */
+                word-break: break-word; /* Break long words */
+                animation: slideIn 0.5s ease-out; /* Slide-in animation */
+            }
+    
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+    
+            .chat-box .user {
+                background-color: rgba(0, 123, 255, 0.4); /* INCREASED TRANSPARENCY: changed from purple to blue */
+                color: white; /* ADJUST: User message text color */
+                text-align: right;
+                align-self: flex-end;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* INCREASED TRANSPARENCY */
+            }
+    
+            .chat-box .bot {
+                background-color: rgba(52, 58, 64, 0.3); /* INCREASED TRANSPARENCY: made more visible from 0 to 0.3 */
+                color: white; /* ADJUST: Bot message text color */
+                text-align: left;
+                align-self: flex-start;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* ADJUST: Message shadow */
+            }
+    
+            /* Typing Indicator */
+            .typing {
+                font-style: italic;
+                color: #ccc;
+                align-self: flex-start;
+                margin-left: 10px;
+            }
+    
+            .typing span {
+                animation: blink 1.5s infinite;
+            }
+    
+            .typing span:nth-child(2) {
+                animation-delay: 0.3s;
+            }
+    
+            .typing span:nth-child(3) {
+                animation-delay: 0.6s;
+            }
+            
+            @keyframes blink {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.2; }
+            }
+    
+            /* ---------- INPUT CONTAINER STYLING - INCREASED TRANSPARENCY ---------- */
+            .input-container {
+                display: flex;
+                justify-content: center;
+                margin-top: 15px; /* ADJUST: Space above input box */
+            }
+    
+            input[type="text"] {
+                padding: 12px; /* ADJUST: Input box padding */
+                border: 1px solid rgba(68, 68, 68, 0.6); /* INCREASED TRANSPARENCY */
+                border-radius: 25px; /* ADJUST: Rounded corners */
+                width: 70%; /* ADJUST: Input width */
+                max-width: 500px; /* ADJUST: Maximum input width */
+                font-size: 1em; /* ADJUST: Input text size */
+                background: rgba(34, 34, 34, 0.6); /* INCREASED TRANSPARENCY */
+                color: white; /* ADJUST: Input text color */
+                outline: none;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* INCREASED TRANSPARENCY */
+                transition: box-shadow 0.3s ease;
+            }
+    
+            input[type="text"]:focus {
+                box-shadow: 0 2px 10px rgba(0, 123, 255, 0.7); /* INCREASED TRANSPARENCY - Changed to blue */
+            }
+    
+            input[type="text"]::placeholder {
+                color: rgba(170, 170, 170, 0.8); /* INCREASED TRANSPARENCY */
+            }
+    
+            button {
+                padding: 12px; /* ADJUST: Button padding */
+                border: none;
+                border-radius: 50%; /* ADJUST: Button shape */
+                background-color: rgba(0, 123, 255, 0.7); /* INCREASED TRANSPARENCY - Changed to blue */
+                color: white; /* ADJUST: Button text color */
+                cursor: pointer;
+                font-size: 1em; /* ADJUST: Button text size */
+                margin-left: 10px; /* ADJUST: Space between input and button */
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* INCREASED TRANSPARENCY */
+            }
+    
+            button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            }
+    
+            button i {
+                font-size: 1.2em;
+            }
+    
+            /* Responsive Design */
+            @media (max-width: 600px) {
+                .container {
+                    width: 95%;
+                    padding: 10px;
+                }
+                input[type="text"] {
+                    width: 80%;
+                }
+                .chat-box {
+                    height: 300px; /* ADJUST: Mobile chat box height */
+                }
+            }
+    
+            /* Voice Controls */
+            .voice-controls {
+                margin-top: 10px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0 10px;
+            }
+    
+            /* Timestamp styling */
+            .timestamp {
+                font-size: 0.65em;
+                color: rgba(255, 255, 255, 0.4); /* INCREASED TRANSPARENCY */
+                margin-top: 3px;
+                display: block;
+                text-align: right;
+                font-family: Arial, sans-serif;
+                font-weight: normal;
+            }
+    
+            .bot .timestamp {
+                text-align: left;
+            }
+    
+            /* Speak Button - Reduced Size */
+            .speak-btn, 
+            button.speak-btn, 
+            div > .speak-btn {
+                width: 14px !important;
+                height: 14px !important;
+                right: 3px !important;
+                bottom: 3px !important;
+                padding: 0 !important;
+                font-size: 0.6em !important;
+                background-color: rgba(0, 123, 255, 0.6); /* INCREASED TRANSPARENCY - Changed to blue */
+            }
+    
+            /* Chat box with gradient background - MORE TRANSPARENT */
+            .chat-box {
+                font-family: "Comic Sans MS", "Comic Sans", cursive !important;
+                width: 100%;
+                height: 400px;
+                padding: 15px;
+                border-radius: 10px;
+                overflow-y: auto; /* Allow scrolling */
+                font-size: 1em;
+                background: linear-gradient(135deg, rgba(30, 30, 40, 0.1), rgba(40, 40, 50, 0.1)); /* HIGHLY INCREASED TRANSPARENCY from 0.256 to 0.1 */
+                border: 1px solid rgba(18, 18, 18, 0.2); /* INCREASED TRANSPARENCY from 0.5 to 0.2 */
+                display: flex;
+                flex-direction: column;
+                box-shadow: inset 0 0 10px rgba(0, 0, 0, 0); /* Deeper inner shadow */
+            }
+            
+            /* Code Popup - INCREASED TRANSPARENCY */
+            .popup {
+                display: none;
+                position: fixed;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 80%;
+                max-width: 600px;
+                background: rgba(255, 255, 255, 0.9); /* INCREASED TRANSPARENCY */
+                color: black;
+                border: none;
+                padding: 20px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* INCREASED TRANSPARENCY */
+                border-radius: 10px;
+                text-align: left;
+                z-index: 2; /* Ensure popup is above other content */
+                animation: fadeIn 0.3s ease-in-out; /* Fade-in animation */
+            }
+    
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+            
+            .popup pre {
+                background: rgba(244, 244, 244, 0.8); /* INCREASED TRANSPARENCY */
+                padding: 15px;
+                border-radius: 5px;
+                overflow-x: auto;
+                font-family: monospace;
+                white-space: pre-wrap; /* Allow wrapping */
+                box-shadow: inset 0 0 5px rgba(0,0,0,0.05); /* INCREASED TRANSPARENCY */
+            }
+    
+            .popup h3 {
+                color: #333;
+                margin-bottom: 15px;
+            }
+    
+            .popup button {
+                margin-top: 10px;
+                padding: 10px 20px;
+                border: none;
+                background: rgba(0, 123, 255, 0.8); /* INCREASED TRANSPARENCY - Changed to blue */
+                color: white;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: 0.3s;
+                font-size: 1em;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* INCREASED TRANSPARENCY */
+            }
+    
+            .popup button:hover {
+                background: rgba(0, 86, 179, 0.8); /* INCREASED TRANSPARENCY - Darker blue on hover */
+                transform: translateY(-1px);
+                box-shadow: 0 3px 7px rgba(0,0,0,0.2); /* INCREASED TRANSPARENCY */
+            }
+    
+            .popup-buttons {
+                display: flex;
+                justify-content: space-around;
+            }
+    
+            .popup button i {
+                margin-right: 5px;
+            }
+    
+            /* Markdown styling for chat content */
+            .chat-box ul {
+                text-align: left;
+                margin: 0;
+                padding-left: 20px;
+            }
+    
+            .chat-box li {
+                margin-bottom: 5px;
+            }
+    
+            .chat-box code {
+                background-color: rgba(0, 0, 0, 0.2); /* INCREASED TRANSPARENCY */
+                padding: 2px 4px;
+                border-radius: 3px;
+                font-family: monospace;
+                font-size: 0.9em;
+            }
+    
+            .chat-box h1, .chat-box h2, .chat-box h3 {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+    
+            .chat-box blockquote {
+                border-left: 3px solid rgba(0, 123, 255, 0.7); /* INCREASED TRANSPARENCY - Changed to blue */
+                margin-left: 0;
+                padding-left: 10px;
+                color: rgba(170, 170, 170, 0.9); /* INCREASED TRANSPARENCY */
+            }
+    
+            .chat-box a {
+                color: rgba(97, 218, 251, 0.9); /* INCREASED TRANSPARENCY */
+                text-decoration: none;
+            }
+    
+            .chat-box a:hover {
+                text-decoration: underline;
+            }
+    
+            .chat-box table {
+                border-collapse: collapse;
+                width: 100%;
+                margin: 10px 0;
+            }
+    
+            .chat-box th, .chat-box td {
+                border: 1px solid rgba(68, 68, 68, 0.6); /* INCREASED TRANSPARENCY */
+                padding: 5px;
+                text-align: left;
+            }
+    
+            .chat-box th {
+                background-color: rgba(0, 0, 0, 0.1); /* INCREASED TRANSPARENCY */
+            }
+    
+            /* Tilde text styling */
+            .dark-text {
+    color: rgba(255, 255, 255, 0.5); /* More transparent text (50% opacity) */
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    padding: 0 4px;
+    border-radius: 3px;
+    font-weight: bold;
+}
+        </style>
+    </head>
+    <body>
+    <!-- Background Video -->
+    <video autoplay muted loop id="background-video" style="position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -1; object-fit: cover;">
+        <source src="{{ url_for('static', filename='Mikasa.mp4') }}" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+    <div class="container">
+        <header>
+            <h1>Mikasa<span class="blinking-cursor">_</span></h1>
+            <h2>Based on OpenChat:7B Large Language Model</h2>
+        </header>
+        <main>
+            <h4 id="greeting">Mikasa & Assistant Mode</h4>
+            <!-- CHAT BOX: Adjusted for full width -->
+            <div class="chat-box" id="chat-box"></div>
+            <!-- INPUT CONTAINER -->
+            <div class="input-container">
+                <input type="text" id="user-input" placeholder="Ask Mikasa..." autofocus>
+                <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+            </div>
+            <div class="voice-controls">
+                <label for="voice-select">Voice:</label>
+                <select id="voice-select">
+                    <!-- Will be populated with available voices -->
+                </select>
+            </div>
+        </main>
+    </div>
+    
+    <div id="code-popup" class="popup">
+        <h3>Code Snippet</h3>
+        <pre id="code-content"></pre>
+        <div class="popup-buttons">
+          <button id="copy-btn"><i class="fas fa-copy"></i> Copy</button>
+          <button class="close-btn"><i class="fas fa-times"></i> Close</button>
+          <button class="speak-btn" style="width:14px !important; height:14px !important; font-size:0.6em !important; right:3px !important; bottom:3px !important; padding:0 !important;">
+            <i class="fas fa-volume-up" style="font-size:0.7em !important;"></i>
+          </button>
+        </div>
+    </div>
+    
+    <script>
+        // Script remains the same as original
+        // Speech synthesis setup
+        const synth = window.speechSynthesis;
+        let voices = [];
+        let currentUtterance = null;
+        let selectedVoice = null;
+        
+        // Video setup - Make sure it's muted
+        const video = document.getElementById('background-video');
+        video.muted = true; // Ensure video is always muted
+        
+        function applySmallButtonStyle() {
+            const speakButtons = document.querySelectorAll('.speak-btn');
+            speakButtons.forEach(button => {
+                button.style.width = '14px';
+                button.style.height = '14px';
+                button.style.right = '3px';
+                button.style.bottom = '3px';
+                button.style.fontSize = '0.6em';
+                button.style.padding = '0';
+            });
+        }
+
+        // Run immediately
+        applySmallButtonStyle();
+
+        // Also run periodically in case buttons are added dynamically
+        setInterval(applySmallButtonStyle, 1000);
+        
+        // Load available voices
+        // Load available voices
+function loadVoices() {
+    voices = synth.getVoices();
+    const voiceSelect = document.getElementById('voice-select');
+    voiceSelect.innerHTML = '';
+    
+    // Filter for only female voices
+    const femaleVoices = voices.filter(voice => {
+        // Check if voice name contains female indicators
+        const femaleIndicators = [
+            'female', 'woman', 'girl', 'féminine', 'weiblich', 
+            // Common female names
+            'allison', 'samantha', 'karen', 'moira', 'tessa', 'kathy', 
+            'victoria', 'amelie', 'zira', 'lisa', 'susan', 'kate', 
+            'ellen', 'julie', 'heather', 'nicole', 'veena', 'siri',
+            'alex', 'samantha', 'sandy', 'fiona', 'catherine', 'emily',
+            'rosa', 'joana', 'laura', 'alva', 'ava', 'ewa', 'carmen'
+        ];
+        
+        const voiceNameLower = voice.name.toLowerCase();
+        
+        // Check if the voice name includes any female indicator
+        return femaleIndicators.some(indicator => voiceNameLower.includes(indicator)) ||
+               // Avoid male-specific indicators
+               (!voiceNameLower.includes('male') && 
+                !voiceNameLower.includes('man') && 
+                !voiceNameLower.includes('guy') && 
+                !voiceNameLower.includes('boy'));
+    });
+    
+    // Sort voices by quality, prioritizing natural-sounding ones
+    const sortedVoices = femaleVoices.sort((a, b) => {
+        // Give priority to neural, premium, and enhanced voices
+        const aQuality = a.name.includes('Neural') || a.name.includes('Premium') || a.name.includes('Enhanced');
+        const bQuality = b.name.includes('Neural') || b.name.includes('Premium') || b.name.includes('Enhanced');
+        
+        if (aQuality && !bQuality) return -1;
+        if (!aQuality && bQuality) return 1;
+        return 0;
+    });
+    
+    // Add all female voices to selector
+    sortedVoices.forEach(voice => {
+        const option = document.createElement('option');
+        option.value = voice.name;
+        option.textContent = `${voice.name} (${voice.lang})`;
+        voiceSelect.appendChild(option);
+    });
+    
+    // Select the best female voice if available
+    const bestVoice = sortedVoices.find(voice => 
+        voice.name.includes('Neural') || 
+        voice.name.includes('Premium') || 
+        voice.name.includes('Enhanced')
+    );
+    
+    if (bestVoice) {
+        selectedVoice = bestVoice;
+        voiceSelect.value = bestVoice.name;
+    } else if (sortedVoices.length > 0) {
+        selectedVoice = sortedVoices[0];
+        voiceSelect.value = selectedVoice.name;
+    }
+    
+    // If no female voices found, show a message
+    if (sortedVoices.length === 0) {
+        const option = document.createElement('option');
+        option.value = "";
+        option.textContent = "No female voices available";
+        option.disabled = true;
+        voiceSelect.appendChild(option);
+    }
+}
+        
+        // Voice changed handler
+        document.getElementById('voice-select').addEventListener('change', function() {
+            const selectedName = this.value;
+            selectedVoice = voices.find(voice => voice.name === selectedName);
+        });
+        
+        // Load voices when they're available
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
+        
+        // Initial load attempt
+        loadVoices();
+        
+        // Function to speak text
+        function speakText(text, button) {
+            // Stop any ongoing speech
+            if (synth.speaking) {
+                synth.cancel();
+                if (currentUtterance && currentUtterance.speakButton) {
+                    currentUtterance.speakButton.classList.remove('speaking');
+                    currentUtterance.speakButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+                }
+            }
+            
+            // Remove markdown, HTML tags, emojis, and tilde characters
+            const cleanText = text
+                .replace(/<[^>]*>/g, '') // Remove HTML tags
+                .replace(/\*\*/g, '')    // Remove bold markdown
+                .replace(/\*/g, '')      // Remove italic markdown
+                .replace(/`/g, '')       // Remove code markdown
+                .replace(/~/g, '')       // Remove tilde characters
+                .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Convert links to just text
+                .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');  // Remove emojis
+            
+            if (cleanText.trim() === '') return;
+            
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            
+            // Set the selected voice
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+            }
+            
+            // Set fixed rate and pitch instead of getting from selects
+            utterance.rate = 1.0;  // Normal speed (fixed value)
+            utterance.pitch = 1.0; // Normal pitch (fixed value)
+            
+            // Store reference to the speak button
+            utterance.speakButton = button;
+            currentUtterance = utterance;
+            
+            // Update button to show speaking state
+            if (button) {
+                button.classList.add('speaking');
+                button.innerHTML = '<i class="fas fa-stop"></i>';
+            }
+            
+            // Handle speech end
+            utterance.onend = function() {
+                if (button) {
+                    button.classList.remove('speaking');
+                    button.innerHTML = '<i class="fas fa-volume-up"></i>';
+                }
+                currentUtterance = null;
+            };
+            
+            // Handle speech error
+            utterance.onerror = function() {
+                if (button) {
+                    button.classList.remove('speaking');
+                    button.innerHTML = '<i class="fas fa-volume-up"></i>';
+                }
+                currentUtterance = null;
+            };
+            
+            // Start speaking
+            synth.speak(utterance);
+        }
+        
+        // Toggle speech
+        function toggleSpeech(text, button) {
+            if (synth.speaking && currentUtterance && currentUtterance.speakButton === button) {
+                synth.cancel();
+                button.classList.remove('speaking');
+                button.innerHTML = '<i class="fas fa-volume-up"></i>';
+                currentUtterance = null;
+            } else {
+                speakText(text, button);
+            }
+        }
+        
+        // Add event listener for the Send button
+        document.getElementById("send-button").addEventListener("click", askMikasa);
+        
+        // Add event listener for Enter key press in the input field
+        document.getElementById("user-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                askMikasa();
+            }
+        });
+        
+        function askMikasa() {
+            const input = document.getElementById('user-input');
+            const chatBox = document.getElementById('chat-box');
+            const userMessage = input.value.trim();
+
+            if (!userMessage) return;
+
+            // Disable input during processing
+            input.disabled = true;
+
+            // Display User Message
+            appendMessage("You", userMessage);
+
+            // Show Typing Indicator
+            const typingIndicator = document.createElement('p');
+            typingIndicator.classList.add('typing');
+            typingIndicator.innerHTML = "Mikasa is typing <span>.</span><span>.</span><span>.</span>";
+            chatBox.appendChild(typingIndicator);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Send message to Flask backend
+            fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userMessage })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`⚠️ Server error (${response.status})! Please try again.`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                chatBox.removeChild(typingIndicator); // Remove typing indicator
+                input.disabled = false; // Re-enable input
+
+                // Process and display Mikasa's response
+                displayResponse(data.reply);
+            })
+            .catch(error => {
+                chatBox.removeChild(typingIndicator);
+                input.disabled = false; // Re-enable input
+                
+                appendMessage("Error", error.message.includes("Failed to fetch") 
+                    ? "⚠️ Network error! Check your internet connection." 
+                    : error.message);
+                
+                console.error("Error:", error);
+            });
+
+            // Clear input field
+            input.value = '';
+        }
+
+        // Function to display Mikasa's response with markdown support
+        function displayResponse(response) {
+            const chatBox = document.getElementById('chat-box');
+
+            // Check if response contains a code snippet (```code```)
+            const codeRegex = /```([\s\S]+?)```/g;
+            const matches = [...response.matchAll(codeRegex)];
+            
+            let cleanedReply = response;
+            
+            // Handle code snippets if found
+            if (matches.length > 0) {
+                // Extract the first code block for the popup
+                const firstCodeMatch = matches[0];
+                const codeContent = firstCodeMatch[1];
+                document.getElementById("code-content").innerHTML = `<code>${escapeHtml(codeContent)}</code>`;
+                document.getElementById("code-popup").style.display = "block";
+                
+                // Replace code blocks with placeholder in chat
+                cleanedReply = response.replace(codeRegex, "[Code Generated]");
+            }
+
+            // Apply basic markdown formatting
+            cleanedReply = formatMarkdown(cleanedReply);
+            
+            // Display structured response
+            appendMessage("Mikasa", cleanedReply, true);
+        }
+
+        // Function to apply basic markdown formatting
+        function formatMarkdown(text) {
+    // First, convert tilde-wrapped text (do this first to avoid conflicts)
+text = text.replace(/~(.*?)~/g, '<span class="dark-text">$1</span>');
+    
+    // Then apply other conversions
+    // Convert headers
+    text = text.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+    text = text.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+    text = text.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+    
+    // Convert bold
+    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
+    // Convert italic
+    text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    
+    // Convert inline code
+    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+    
+    // Convert links
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+    
+    // Convert blockquotes
+    text = text.replace(/^> (.*$)/gm, '<blockquote>$1</blockquote>');
+    
+    // Convert unordered lists
+    text = text.replace(/^\s*[-*+]\s+(.*$)/gm, '<li>$1</li>');
+    
+    // Convert ordered lists
+    text = text.replace(/^\s*\d+\.\s+(.*$)/gm, '<li>$1</li>');
+    
+    // Wrap list items in ul/ol tags
+    if (text.includes('<li>')) {
+        text = '<ul>' + text + '</ul>';
+        // Fix nested lists
+        text = text.replace(/<\/ul><ul>/g, '');
+    }
+    
+    // Handle paragraphs
+    const paragraphs = text.split('\n\n');
+    if (paragraphs.length > 1) {
+        text = paragraphs.map(p => {
+            if (!p.startsWith('<h') && !p.startsWith('<ul>') && !p.startsWith('<blockquote>')) {
+                return `<p>${p}</p>`;
+            }
+            return p;
+        }).join('');
+    }
+    
+    return text;
+}
+
+// CSS to include in your stylesheet:
+/*
+
+*/
+
+        // Function to append messages in the chatbox
+        function appendMessage(sender, message, isStructured = false) {
+            const chatBox = document.getElementById("chat-box");
+            const messageElement = document.createElement("p");
+            
+            messageElement.classList.add(sender === "Mikasa" ? "bot" : sender === "Error" ? "error" : "user");
+            
+            // Create message content
+            const messageContent = document.createElement("div");// Continuing from where the code left off...
+            
+            // If this is a structured message (with HTML)
+            if (isStructured) {
+                messageContent.innerHTML = message;
+            } else {
+                // Plain text message (escape HTML)
+                messageContent.textContent = message;
+            }
+            
+            // Append content to message element
+            messageElement.appendChild(messageContent);
+            
+            // Add timestamp
+            const timestamp = document.createElement("span");
+            timestamp.classList.add("timestamp");
+            const now = new Date();
+            timestamp.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            messageElement.appendChild(timestamp);
+            
+            // Add speak button for bot messages
+            if (sender === "Mikasa") {
+                const speakButton = document.createElement("button");
+                speakButton.classList.add("speak-btn");
+                speakButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+                speakButton.style.position = "relative";
+                speakButton.style.width = "14px";
+                speakButton.style.height = "14px";
+                speakButton.style.fontSize = "0.6em";
+                speakButton.style.padding = "0";
+                
+                // Add event listener
+                speakButton.addEventListener("click", function() {
+                    toggleSpeech(message, this);
+                });
+                
+                messageElement.appendChild(speakButton);
+            }
+            
+            // Add message to chat box
+            chatBox.appendChild(messageElement);
+            
+            // Scroll to bottom of chat
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+        
+        // Function to escape HTML characters
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+        
+        // Handle copy button in code popup
+        document.getElementById("copy-btn").addEventListener("click", function() {
+            const codeContent = document.getElementById("code-content").textContent;
+            navigator.clipboard.writeText(codeContent)
+                .then(() => {
+                    this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Could not copy text: ', err);
+                    this.innerHTML = '<i class="fas fa-times"></i> Failed!';
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                    }, 2000);
+                });
+        });
+        
+        // Handle close button in code popup
+        document.querySelectorAll(".close-btn").forEach(button => {
+            button.addEventListener("click", function() {
+                document.getElementById("code-popup").style.display = "none";
+            });
+        });
+        
+        // Handle speak button in code popup
+        document.querySelector(".popup .speak-btn").addEventListener("click", function() {
+            const codeContent = document.getElementById("code-content").textContent;
+            toggleSpeech(codeContent, this);
+        });
+        
+        // Add initial greeting message when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                displayResponse("Hey... it's Mikasa. I'm here with you, always. What do you need me to do today, Charan?");
+            }, 1000);
+        });
+        
+        // Close popup when clicking outside
+        window.addEventListener('click', function(event) {
+            const popup = document.getElementById('code-popup');
+            if (event.target === popup) {
+                popup.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
