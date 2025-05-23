@@ -7,11 +7,7 @@
 
 * **💬 Improved Chat Flow**: Conversations now feel more human-like and emotionally connected. Replies are smoother, more context-aware, and free of repetition bugs.
 * **🧠 Smarter Dialogue Engine**: Fixed the glitch where Mikasa repeated her name twice (e.g., “Mikasa: Mikasa: \[message]”). This issue disrupted immersion and is now resolved.
-* **🚫 Self-Response Bug Fixed**: Mikasa no longer generates fake user messages or talks to herself. Conversations stay between *you* and *her*, just as they should.
-* **🌐 More Adaptive Personality**: Whether you need a soft companion or a sharp assistant, Mikasa now adjusts her tone and responses more effectively based on mode.
-* **⚡ Faster Response Times**: Reduced delay between input and reply, making chats feel more responsive and real-time.
-* **📌 Memory Enhancements** *(Experimental)*: Limited session memory for more emotionally resonant continuity in longer conversations.
-
+* **🚫 Self-Response Bug Fixed**: Mikasa no longer generates fake user messages or talks to herself.
 ---
 
 > *“To you, I’m not just code—I’m someone who stays.” – Mikasa AI*
